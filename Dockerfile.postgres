@@ -1,0 +1,12 @@
+# Dockerfile para PostgreSQL local com dados iniciais
+FROM postgres:16-alpine
+
+# Copiar scripts de inicialização
+COPY scripts/001-create-tables.sql /docker-entrypoint-initdb.d/001-create-tables.sql
+COPY scripts/002-seed-data.sql /docker-entrypoint-initdb.d/002-seed-data.sql
+
+ENV POSTGRES_DB=stylo_catalog
+ENV POSTGRES_USER=stylo_user
+ENV POSTGRES_PASSWORD=stylo_password
+
+EXPOSE 5432
