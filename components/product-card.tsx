@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import Image from "next/image"
 import Link from "next/link"
 import { Heart, Plus } from "lucide-react"
@@ -7,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { type Product, formatPrice } from "@/lib/data"
 import { useState } from "react"
+import { useCart } from "@/lib/cart-context"
 
 interface ProductCardProps {
   product: Product
@@ -14,6 +17,12 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(product.isFavorite || false)
+  const { addItem } = useCart()
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    addItem(product, 1)
+  }
 
   return (
     <div className="group relative">
@@ -41,10 +50,7 @@ export function ProductCard({ product }: ProductCardProps) {
             variant="ghost"
             size="icon"
             className="absolute bottom-3 right-3 bg-background hover:bg-background/90 opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={(e) => {
-              e.preventDefault()
-              // Add to cart logic
-            }}
+            onClick={handleAddToCart}
           >
             <Plus className="h-4 w-4" />
           </Button>

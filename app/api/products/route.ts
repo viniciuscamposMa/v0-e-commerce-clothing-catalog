@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import { products, type Product } from "@/lib/data"
+import { getAllProducts } from "@/lib/products-store"
+import type { Product } from "@/lib/data"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
   const search = searchParams.get("search")
   const sortBy = searchParams.get("sortBy")
 
-  let filteredProducts: Product[] = [...products]
+  let filteredProducts: Product[] = getAllProducts()
 
   // Filter by category
   if (category) {

@@ -2,13 +2,14 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { CartProvider } from "@/lib/cart-context"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "STYLO | Catálogo de Roupas",
+  title: "Dom-Style | Catálogo de Roupas",
   description: "Descubra nossa coleção de camisas, shorts, chinelos e tênis. Moda essencial para o seu dia a dia.",
   generator: "v0.app",
   icons: {
@@ -38,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`font-sans antialiased`}>
-        {children}
+        <CartProvider>{children}</CartProvider>
         <Analytics />
       </body>
     </html>

@@ -2,12 +2,13 @@
 
 import Image from "next/image"
 import { useState } from "react"
-import { Heart, Minus, Plus, ShoppingBag, Truck, RefreshCw } from "lucide-react"
+import { Heart, Minus, Plus, ShoppingBag, Truck, RefreshCw, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { type Product, formatPrice, categories } from "@/lib/data"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { useCart } from "@/lib/cart-context"
 
 interface ProductDetailProps {
   product: Product
@@ -17,12 +18,20 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [isAdded, setIsAdded] = useState(false)
+  const { addItem } = useCart()
 
   const categoryName = categories.find((c) => c.id === product.category)?.name || product.category
 
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0
+
+  const handleAddToCart = () => {
+    addItem(product, quantity, selectedSize || undefined)
+    setIsAdded(true)
+    setTimeout(() => setIsAdded(false), 2000)
+  }
 
   return (
     <section className="py-8 md:py-12">
@@ -129,11 +138,24 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 </div>
               </div>
 
-              {/* Actions */}
+              {/* Actions - Added cart functionality */}
               <div className="flex gap-3 mb-8">
-                <Button size="lg" className="flex-1 gap-2" disabled={!selectedSize}>
-                  <ShoppingBag className="h-5 w-5" />
-                  Adicionar ao carrinho
+                <Button
+                  size="lg"
+                  className={cn("flex-1 gap-2 transition-all", isAdded && "bg-green-600 hover:bg-green-600")}
+                  onClick={handleAddToCart}
+                >
+                  {isAdded ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      Adicionado!
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="h-5 w-5" />
+                      Adicionar ao carrinho
+                    </>
+                  )}
                 </Button>
                 <Button
                   variant="outline"

@@ -2,9 +2,10 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Menu, ShoppingBag, Search, User } from "lucide-react"
+import { Menu, ShoppingBag, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useCart } from "@/lib/cart-context"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -16,14 +17,10 @@ const navigation = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { totalItems } = useCart()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Announcement Bar */}
-      <div className="bg-foreground text-background text-center py-2 text-sm font-medium">
-        Frete grátis em compras acima de R$ 299 — Aproveite!
-      </div>
-
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Mobile Menu */}
@@ -50,9 +47,8 @@ export function Header() {
             </SheetContent>
           </Sheet>
 
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold tracking-tight">STYLO</span>
+            <span className="text-2xl font-bold tracking-tight">Dom-Style</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -68,23 +64,20 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Right Icons */}
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
               <span className="sr-only">Buscar</span>
             </Button>
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Conta</span>
-            </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-foreground text-background text-xs flex items-center justify-center">
-                0
-              </span>
-              <span className="sr-only">Carrinho</span>
-            </Button>
+            <Link href="/carrinho">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingBag className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-foreground text-background text-xs flex items-center justify-center">
+                  {totalItems}
+                </span>
+                <span className="sr-only">Carrinho</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
